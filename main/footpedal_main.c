@@ -667,10 +667,10 @@ static esp_hid_raw_report_map_t ble_report_map[] = {
 static esp_hid_device_config_t ble_hid_config = {.vendor_id = 0x1234,
                                                  .product_id = 0x5678,
                                                  .version = 0x0001,
-                                                 .device_name = "cvg-mouse",
+                                                 .device_name = "cvg-mouse3",
                                                  .manufacturer_name =
                                                      "UT Southwestern",
-                                                 .serial_number = "0000000001",
+                                                 .serial_number = "0000000012",
                                                  .report_maps = ble_report_map,
                                                  .report_maps_len = 1};
 

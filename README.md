@@ -6,6 +6,45 @@ The device communicates with the keyboard and when connected to a
 bluetooth host identifies as an HID compliant mouse sends pedal presses
 as mouse clicks (left, middle, and right).
 
+## Reading refernece 
+- [Dev Board](https://documentation.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-usb-otg/user_guide.html?title=ESP32-S3-USB-OTG%20User%20Guide#getting-started)
+
+## Software/Enviornment Setup for CLI 
+### Linux packages needed 
+```bash
+sudo apt-get install git wget make libncurses-dev flex bison gperf python python-serial
+```
+
+
+### Loading software onto the ESP device 
+- On your host machine/laptop/workstation, use the following to install `ESP-IDF Installation Manager (EIM)` when using 
+```bash
+# Add the Espressif APT repository
+echo "deb [trusted=yes] https://dl.espressif.com/dl/eim/apt/ stable main" | sudo tee /etc/apt/sources.list.d/espressif.list
+sudo apt update
+# Install CLI only
+sudo apt install eim-cli   
+eim install
+```
+- To activate ESP-IDF virtual enviornment 
+	- Note : replace `/home/utsw-bmen-laptop` with  
+```bash
+source "$HOME/.espressif/tools/activate_idf_v6.0.2.sh"
+```
+
+- To ensure ESP-IDF submodules are updated (OPTIONAL) 
+	- Enter ESP-IDF repo: Example `cd~/.espressif/<version>/esp-idf`
+	- Check sudmobudle status by running `git submodule status`
+		- Note : The EIM install already conducts a `git pull` on all the submodules
+			- Any lines starting with `-` means the submodule HASN'T been initialized 
+			- A leading `+` means it's checked out but not at the commit the parent repo expects 
+		- Any steps taken after this is to ensure the submodules are updated 
+	- To update submodules explicitly 
+		- Run : `git submodule update --init --recursive`  
+
+
+
+
 ## Device Setup
 
 ### Software Required
@@ -32,11 +71,44 @@ steps to configure and use ESP-IDF to build projects.
 
 ### Build and Flash
 
-Build the project and flash it to the board, then run monitor tool to
-view serial output.
+To determine ESP32 device path on `LINUX`  
+Step 1) Unplug ESP32 device from host machine
+Step 2) Use the following to determine ESP32 device path
+	- In this instance, the device path is : `/dev/ttyACM0` 
+	```bash
+	dmesg: read kernel buffer failed: Operation not permitted
+	(venv) utsw-bmen-laptop@utswbmenlaptop-UX330UAK:~/.espressif/v6.0.2/esp-idf$ sudo dmesg | tail -20
+	[sudo] password for utsw-bmen-laptop: 
+	[426303.336237] usb 1-2: SerialNumber: F4:12:FA:9B:65:C0
+	[426303.339900] cdc_acm 1-2:1.0: ttyACM0: USB ACM device
+	[426307.432695] usb 1-2: USB disconnect, device number 12
+	[429267.513829] workqueue: delayed_fput hogged CPU for >10000us 4 times, consider switching to WQ_UNBOUND
+	[432465.339809] usb 1-2: new full-speed USB device number 13 using xhci_hcd
+	[432465.467314] usb 1-2: New USB device found, idVendor=303a, idProduct=1001, bcdDevice= 1.01
+	[432465.467320] usb 1-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+	[432465.467323] usb 1-2: Product: USB JTAG/serial debug unit
+	[432465.467325] usb 1-2: Manufacturer: Espressif
+	[432465.467327] usb 1-2: SerialNumber: F4:12:FA:9B:65:C0
+	[432465.471070] cdc_acm 1-2:1.0: ttyACM0: USB ACM device
+	[432466.455287] usb 1-2: USB disconnect, device number 13
+	[433163.939741] usb 1-2: new full-speed USB device number 14 using xhci_hcd
+	[433164.068572] usb 1-2: New USB device found, idVendor=303a, idProduct=1001, bcdDevice= 1.01
+	[433164.068584] usb 1-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+	[433164.068586] usb 1-2: Product: USB JTAG/serial debug unit
+	[433164.068588] usb 1-2: Manufacturer: Espressif
+	[433164.068590] usb 1-2: SerialNumber: F4:12:FA:9B:65:C0
+	[433164.072040] cdc_acm 1-2:1.0: ttyACM0: USB ACM device
+	[433164.627732] usb 1-2: USB disconnect, device number 14
+	```
 
+## Reprogramming
+- Take ESP32 out 
+- Hold BOOT button
+- Then plug in ESP32 board
+- Use the following as a sanity check : `(venv) utsw-bmen-laptop@utswbmenlaptop-UX330UAK:~/esp32s3-footpedal-mouse$ idf.py -p /dev/ttyACM0 monitor`  
 ```sh
 idf.py -p PORT flash monitor
+idf.py -p /dev/ttyACM0 flash
 ```
 
 > (To exit the serial monitor, type ``Ctrl-]``.)
