@@ -6,9 +6,10 @@
  * - esp-idf/examples/bluetooth/esp_hid_device esp_hid_device example
  * - esp-idf/examples/peripherals/usb/host/hid
  *
- * Copyright (C) 2025 Ian Zurutuza, Brian Blasi 
- 
+ * Copyright (C) 2025 Ian Zurutuza, Brian Blasi
+
  * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
+ *
  *
  * SPDX-License-Identifier: Unlicense OR CC0-1.0
  */
